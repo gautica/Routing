@@ -135,25 +135,6 @@ public class ThreeOpt  {
             driver.clientsToServe[j] = temp3;
             driver.clientsToServe[k-1] = temp4;
         }
-        /**
-        if (i == 0) {
-            driver.tour[i] = new Line(Depot.depot, driver.clientsToServe[index1]);
-        } else {
-            driver.tour[i] = new Line(driver.clientsToServe[i-1], driver.clientsToServe[index1]);
-        }
-        driver.tour[j] = new Line(driver.clientsToServe[index2], driver.clientsToServe[index3]);
-        if (k == driver.tour.length - 1) {
-            driver.tour[k] = new Line(driver.clientsToServe[index4], Depot.depot);
-        } else {
-            driver.tour[k] = new Line(driver.clientsToServe[index4], driver.clientsToServe[k]);
-        }
-        */
-    }
-    
-    private void swap(int index1, int index2) {
-        Client temp = driver.clientsToServe[index1];
-        driver.clientsToServe[index1] = driver.clientsToServe[index2];
-        driver.clientsToServe[index2] = temp;
     }
     
     private int indexOfMin(double[] array) {

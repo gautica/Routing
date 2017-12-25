@@ -90,7 +90,34 @@ public class ReadWriteExcel {
         
         return contentMatrix;
     }
+    
     public static void writeXLSFile(String[][] table, String path) throws IOException {
+        String sheetName = "Sheet1";
+        
+        HSSFWorkbook wb = new HSSFWorkbook();
+        HSSFSheet sheet = wb.createSheet(sheetName);
+        
+        // iterating r number of rows
+        for (int r = 0; r < table.length; r++) {
+            HSSFRow row = sheet.createRow(r);
+            
+            // iterating c number of colums
+            for (int c = 0; c < table[r].length; c++) {
+                HSSFCell cell = row.createCell(c);
+                
+                cell.setCellValue(table[r][c]);
+            }
+        }
+        
+        FileOutputStream fileout = new FileOutputStream(path);
+        
+        //write this workbook to an Outputstream
+        wb.write(fileout);
+        fileout.flush();
+        fileout.close();
+    }
+    
+    public static void writeXLSFile(int[][] table, String path) throws IOException {
         String sheetName = "Sheet1";
         
         HSSFWorkbook wb = new HSSFWorkbook();

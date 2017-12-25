@@ -38,13 +38,30 @@ public class Driver {
         tour[tour.length-1] = new Line(clientsToServe[clientsToServe.length-1], Depot.depot);
     }
     
+    public void updateFamilarity() {
+        for (Client client : clientsToServe) {
+            int index = Integer.parseInt(client.getID());
+            familarity[index] = 1;
+        }
+    }
+    
+    public int getFamilarity() {
+        int count = 0;
+        for (int f : familarity) {
+            if (f == 1) {
+                count++;
+            }
+        }
+        return count;
+    }
+    
     public int getServeTime() {
         int serTime = 0;
         loop1: for (int i = 0; i < familarity.length; i++) {
             for (Client client : clientsToServe) {
-                if (i == (Integer.parseInt(client.getID()) - 1)) {
+                if (i == (Integer.parseInt(client.getID()))) {
                     if (familarity[i] == 0) {
-                    serTime += 20;
+                        serTime += 20;
                     } else {
                         serTime += 10;
                     }
