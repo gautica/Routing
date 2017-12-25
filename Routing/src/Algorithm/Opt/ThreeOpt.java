@@ -23,69 +23,131 @@ public class ThreeOpt  {
     public void optimize(int i, int j, int k) {
         //Depot[] optimized = new Depot[driver.clientsToServe.length];
         /**
-         * start--> i
-         * i+1 ---- j
-         * j+1 ---- k
-         * end <-- k+1
+         * start--> i-1
+         * i ---- j-1
+         * j ---- k-1
+         * end <-- k
          * We have 8 possibility for the three Edges-- new connections --
          */
         double[] dists = new double[8];
-        // i -- i+1 ==> j -- j+1 ==> k -- k+1
+        // i-1 -- i ==> j-1 -- j ==> k-1 -- k
         dists[0] = distSumme(new Paar(i-1, i), new Paar(j-1, j), new Paar(k-1, k));
-        // i -- i+1 ==> j -- k ==> j+1 -- k+1
-        dists[1] = distSumme(new Paar(i -1, i), new Paar(j-1, k-1), new Paar(j, k));
-        // i -- j ==> i+1 -- j+1 ==> k -- k+1
+        // i-1 -- i ==> j-1 -- k-1 ==> j -- k
+        dists[1] = distSumme(new Paar(i-1, i), new Paar(j-1, k-1), new Paar(j, k));
+        // i-1 -- j-1 ==> i -- j ==> k-1 -- k
         dists[2] = distSumme(new Paar(i-1, j-1), new Paar(i, j), new Paar(k-1, k));
-        // i -- j ==> i+1 --k ==> j+1 -- k+1
+        // i-1 -- j-1 ==> i --k-1 ==> j -- k
         dists[3] = distSumme(new Paar(i-1, j-1), new Paar(i, k-1), new Paar(j, k));
-        // i -- j+1 ==> k -- i+1 ==> j -- k+1
+        // i-1 -- j ==> k-1 -- i ==> j-1 -- k
         dists[4] = distSumme(new Paar(i-1, j), new Paar(k-1, i), new Paar(j-1, k));
-        // i -- j+1 ==> k -- j ==> i+1 -- k+1
+        // i-1 -- j ==> k-1 -- j-1 ==> i -- k
         dists[5] = distSumme(new Paar(i-1, j), new Paar(k-1, j-1), new Paar(i, k));
-        // i -- k ==> j+1 -- i+1 ==> j -- k+1
+        // i-1 -- k-1 ==> j -- i ==> j-1 -- k
         dists[6] = distSumme(new Paar(i-1, k-1), new Paar(j, i), new Paar(j-1, k));
-        // i -- k ==> j+1 -- j ==> i+1 -- k+1
+        // i-1 -- k-1 ==> j -- j-1 ==> i -- k
         dists[7] = distSumme(new Paar(i-1, k-1), new Paar(j, j-1), new Paar(i, k));
-        
-         if (indexOfMin(dists) != 0) System.out.println(indexOfMin(dists));
+        //if (indexOfMin(dists) != 0) System.out.println(indexOfMin(dists));
         // choose min. distance
         switch(indexOfMin(dists)) {
+            case 0:
+                break;
             case 1:
-                swap(j, k-1);
+                //swap(j, k-1);
+                createTour(i, j, k, i, j-1, k-1, j);
                 break;
             case 2:
-                swap(i, j-1);
+                //swap(i, j-1);
+                createTour(i, j, k, j-1, i, j, k-1);
                 break;
             case 3:
-                // i+1 <--> j
-                swap(i, j-1);
-                // j+1 < --> k
-                swap(j, k-1);
+                // i <--> j-1
+                //swap(i, j-1);
+                // j < --> k-1
+                //swap(j, k-1);
+                createTour(i, j, k, j-1, i, k-1, j);
                 break;
-            case 4:
-                // i+1 <--> j+1
-                swap(i, j-1);
-                // j <--> k
-                swap(j-1, k-1);
-                break;
+            case 4:     
+                // i <--> j
+                //swap(i, j);                
+                // j-1 <--> k-1
+                //swap(j-1, k-1);
+                createTour(i, j, k, j, k-1, i, j-1);
+               break;
             case 5:
-                swap(i, j);
-                swap(j, k-1);
-                swap(j-1, j);
+                //swap(i, j);
+                //swap(j, k-1);
+                //swap(j-1, j);
+                createTour(i, j, k, j, k-1, j-1, i);
                 break;
             case 6:
-                swap(i, k-1);
-                swap(j-1, j);
-                swap(j, k-1);
+                //swap(i, k-1);
+                //swap(j-1, j);
+                //swap(j, k-1);
+                createTour(i, j, k, k-1, j, i, j-1);
                 break;
             case 7:
-                swap(i, k-1);
-                swap(j-1, j);
+                //swap(i, k-1);
+                //swap(j-1, j);
+                createTour(i, j, k, k-1, j, j-1, i);
                 break;
             default:
                 // do nothing
+                System.err.println("error in three opt");
                 break;     
         }
+    }
+    
+    private void createTour(int i, int j, int k, int index1, int index2, int index3, int index4) {
+        Client temp1 = driver.clientsToServe[index1];
+        Client temp2 = driver.clientsToServe[index2];
+        Client temp3 = driver.clientsToServe[index3];
+        Client temp4 = driver.clientsToServe[index4];
+        if (index1 == index2 && index3 == index4) {
+            driver.clientsToServe[i] = temp1;
+            driver.clientsToServe[j] = temp3;
+        } else if (index1 == index2) {
+            if (i == j-1) {
+                driver.clientsToServe[i] = temp1;
+                driver.clientsToServe[j] = temp3;
+                driver.clientsToServe[k-1] = temp4;
+            } else if (j == k-1) {
+                driver.clientsToServe[i] = temp1;
+                driver.clientsToServe[j-1] = temp3;
+                driver.clientsToServe[j] = temp4;
+            } else {
+                System.out.println("unexpected");
+            }
+        } else if (index3 == index4) {
+            if (i == j-1) {
+                driver.clientsToServe[i] = temp1;
+                driver.clientsToServe[j] = temp2;
+                driver.clientsToServe[k-1] = temp3;
+            } else if (j == k-1) {
+                driver.clientsToServe[i] = temp1;
+                driver.clientsToServe[j-1] = temp2;
+                driver.clientsToServe[j] = temp3;
+            } else {
+                System.out.println("unexpected");
+            }
+        } else {
+            driver.clientsToServe[i] = temp1;
+            driver.clientsToServe[j-1] = temp2;
+            driver.clientsToServe[j] = temp3;
+            driver.clientsToServe[k-1] = temp4;
+        }
+        /**
+        if (i == 0) {
+            driver.tour[i] = new Line(Depot.depot, driver.clientsToServe[index1]);
+        } else {
+            driver.tour[i] = new Line(driver.clientsToServe[i-1], driver.clientsToServe[index1]);
+        }
+        driver.tour[j] = new Line(driver.clientsToServe[index2], driver.clientsToServe[index3]);
+        if (k == driver.tour.length - 1) {
+            driver.tour[k] = new Line(driver.clientsToServe[index4], Depot.depot);
+        } else {
+            driver.tour[k] = new Line(driver.clientsToServe[index4], driver.clientsToServe[k]);
+        }
+        */
     }
     
     private void swap(int index1, int index2) {
@@ -107,16 +169,17 @@ public class ThreeOpt  {
     }
     private double distSumme (Paar p1, Paar p2, Paar p3) {
         double dist = 0;
-        if (p1.start == -1) 
+        if (p1.start == -1) {
             dist += Distance.calcDistance(Depot.depot, driver.clientsToServe[p1.end]);
-        else 
+        } else { 
             dist += Distance.calcDistance(driver.clientsToServe[p1.start], driver.clientsToServe[p1.end]);
+        }
         dist += Distance.calcDistance(driver.clientsToServe[p2.start], driver.clientsToServe[p2.end]);
-        if (p3.end == driver.clientsToServe.length)
+        if (p3.end == driver.clientsToServe.length) {
             dist += Distance.calcDistance(driver.clientsToServe[p3.start], Depot.depot);
-        else
-            Distance.calcDistance(driver.clientsToServe[p3.start], driver.clientsToServe[p3.end]);
-        
+        } else {
+            dist += Distance.calcDistance(driver.clientsToServe[p3.start], driver.clientsToServe[p3.end]);
+        }
         return dist;
     }
     private class Paar{

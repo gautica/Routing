@@ -72,7 +72,7 @@ public class Crossing {
         
         if ((vector1.getX() == 0) && (vector2.getX() == 0)) {
             return false;
-        } else if ((vector1.getY()*vector2.getX()) == (vector1.getX()*vector2.getY())) {
+        } else if ((vector1.getX() != 0) && (vector2.getX() != 0) && (vector1.getY()*vector2.getX()) == (vector1.getX()*vector2.getY())) {
             return false;
         } 
         return true;
@@ -90,8 +90,8 @@ public class Crossing {
     }
     
     private boolean isOnLine(Point crossOver, Line line) {
-        return (crossOver.getX() < Math.max(line.getStart().getX(), line.getEnd().getX()) &&
-                crossOver.getX() > Math.min(line.getStart().getX(), line.getEnd().getX()));
+        return (crossOver.getX() <= Math.max(line.getStart().getX(), line.getEnd().getX()) &&
+                crossOver.getX() >= Math.min(line.getStart().getX(), line.getEnd().getX()));
     }
     
     private boolean isSamePoint(Point point1, Point point2) {

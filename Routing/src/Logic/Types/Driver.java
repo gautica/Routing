@@ -15,11 +15,13 @@ public class Driver {
     public static int Capacity = 5;
     public Client[] clientsToServe;
     public final Line[] tour;
-    public final int[] serveTime;
-    public Driver(Client[] clientsToServe, int[] serveTime) {
+    public final int[] familarity = new int[100];
+    public Driver(Client[] clientsToServe) {
         this.clientsToServe = clientsToServe;
         tour = new Line[clientsToServe.length + 1];
-        this.serveTime = serveTime;
+        for (int i = 0; i < familarity.length; i++) {       // init familarity matrix, 0 stand for strange
+            familarity[i] = 0;
+        }
         //createTour();
     }    
     
@@ -38,10 +40,14 @@ public class Driver {
     
     public int getServeTime() {
         int serTime = 0;
-        loop1: for (int i = 0; i < this.serveTime.length; i++) {
+        loop1: for (int i = 0; i < familarity.length; i++) {
             for (Client client : clientsToServe) {
                 if (i == (Integer.parseInt(client.getID()) - 1)) {
-                    serTime += serveTime[i];
+                    if (familarity[i] == 0) {
+                    serTime += 20;
+                    } else {
+                        serTime += 10;
+                    }
                     continue loop1;
                 }
             }

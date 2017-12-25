@@ -33,7 +33,6 @@ public class TwoOpt  {
         for (int i = crossIdx1; i <= crossIdx2; i++) {
             optimizedArray[i] = driver.clientsToServe[crossIdx2 + crossIdx1 - i];
         }
-        //optimizedArray[optimizedArray.length - 1] = driver.clientsToServe[driver.clientsToServe.length - 1];
         driver.clientsToServe = optimizedArray;
     }
     

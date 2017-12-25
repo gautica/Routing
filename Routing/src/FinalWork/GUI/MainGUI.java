@@ -4,15 +4,12 @@
 package FinalWork.GUI;
 
 import Logic.Types.Depot;
-import Logic.Types.Point;
 import Logic.Types.Driver;
 import java.awt.BasicStroke;
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
-import java.awt.geom.Line2D;
 import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 
@@ -26,10 +23,10 @@ public class MainGUI extends javax.swing.JFrame {
      * @param drivers
      */
     
-    public MainGUI(Driver[] drivers) {
+    public MainGUI(Driver driver) {
         initComponents();
         
-        Panel panel = new Panel(drivers);       
+        Panel panel = new Panel(driver);       
         panel.setLayout(new BorderLayout());
         this.setContentPane(panel);
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -61,10 +58,10 @@ public class MainGUI extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
 
     private static class Panel extends JPanel {
-        private final Driver[] drivers;
+        private final Driver driver;
 
-        public Panel (Driver[] drivers) {
-            this.drivers = drivers;
+        public Panel (Driver driver) {
+            this.driver = driver;
         }
         
         @Override
@@ -77,65 +74,39 @@ public class MainGUI extends javax.swing.JFrame {
             g2d.setStroke(new BasicStroke(2,
                     BasicStroke.CAP_ROUND, BasicStroke.JOIN_BEVEL));
             
-            // Actual drawing
-            for (int i = 0; i < this.drivers.length; i++) {
-                g2d.setColor(getColor(i));
-                g2d.drawLine((int) (Depot.depot.getX() / 5),
-                        (int) (Depot.depot.getY() / 5), 
-                        (int) (drivers[i].clientsToServe[0].getX() / 5), 
-                        (int) (drivers[i].clientsToServe[0].getY() / 5));
-                for (int j = 0; j < drivers[i].clientsToServe.length - 1; j++) {
-                    //g2d.setColor(Color.BLACK);
-                    g2d.fillOval((int) drivers[i].clientsToServe[j].getX() / 5 - 5, (int) drivers[i].clientsToServe[j].getY() / 5 - 5, 10, 10);
-                    g2d.drawString(drivers[i].clientsToServe[j].getID(), (int) drivers[i].clientsToServe[j].getX() / 5 + 4, (int) drivers[i].clientsToServe[j].getY() / 5);
-                    //g2d.setColor(getColor(i));
-                    g2d.drawLine((int) (drivers[i].clientsToServe[j].getX() / 5),
-                                    (int) (drivers[i].clientsToServe[j].getY() / 5),
-                                    (int) (drivers[i].clientsToServe[j+1].getX() /5),
-                                    (int) (drivers[i].clientsToServe[j+1].getY() /5));
-                }
-                g2d.fillOval((int) drivers[i].clientsToServe[drivers[i].clientsToServe.length-1].getX() / 5 - 5, (int) drivers[i].clientsToServe[drivers[i].clientsToServe.length-1].getY() / 5 - 5, 10, 10);
-                g2d.drawString(drivers[i].clientsToServe[drivers[i].clientsToServe.length-1].getID(),
-                        (int) drivers[i].clientsToServe[drivers[i].clientsToServe.length-1].getX() / 5 + 4,
-                        (int) drivers[i].clientsToServe[drivers[i].clientsToServe.length-1].getY() / 5);
-                g2d.drawLine((int) (Depot.depot.getX() / 5), 
-                            (int) (Depot.depot.getY() / 5), 
-                            (int) (drivers[i].clientsToServe[drivers[i].clientsToServe.length-1].getX() / 5), 
-                            (int) (drivers[i].clientsToServe[drivers[i].clientsToServe.length-1].getY() / 5));
+            g2d.drawLine((int) (Depot.depot.getX()),
+                    (int) (Depot.depot.getY()), 
+                    (int) (driver.clientsToServe[0].getX()), 
+                    (int) (driver.clientsToServe[0].getY()));
+            for (int j = 0; j < driver.clientsToServe.length - 1; j++) {
+                //g2d.setColor(Color.BLACK);
+                g2d.fillOval((int) driver.clientsToServe[j].getX() - 5, (int) driver.clientsToServe[j].getY() - 5, 10, 10);
+                g2d.drawString(driver.clientsToServe[j].getID(), (int) driver.clientsToServe[j].getX() + 4, (int) driver.clientsToServe[j].getY());
+                //g2d.setColor(getColor(i));
+                g2d.drawLine((int) (driver.clientsToServe[j].getX()),
+                                (int) (driver.clientsToServe[j].getY()),
+                                (int) (driver.clientsToServe[j+1].getX()),
+                                (int) (driver.clientsToServe[j+1].getY()));
             }
-        }
-        
-    private void drawArrowHead(Graphics2D g2, Point tip, Point tail, Color color)
-        {
-        g2.setPaint(color);
-        double dy = tip.getY() - tail.getY();
-        double dx = tip.getX()- tail.getX();
-        double theta = Math.atan2(dy, dx);
-        //System.out.println("theta = " + Math.toDegrees(theta));
-        double x, y, rho = theta + Math.toRadians(40);
-        for(int j = 0; j < 2; j++)
-        {
-            x = tip.getX() - 10 * Math.cos(rho);
-            y = tip.getY() - 10 * Math.sin(rho);
-            g2.draw(new Line2D.Double(tip.getX(), tip.getY(), x, y));
-            rho = theta - Math.toRadians(40);
-        }
-    }
-        private Color getColor(int i) {
-            switch(i) {
-                case 0:
-                    return Color.BLACK;
-                case 1:
-                    return Color.BLUE;
-                case 2:
-                    return Color.GREEN;
-                case 3:
-                    return Color.RED;
-                case 4:
-                    return Color.ORANGE;
-                default:
-                    return Color.BLACK;
+            g2d.fillOval((int) driver.clientsToServe[driver.clientsToServe.length-1].getX() - 5, (int) driver.clientsToServe[driver.clientsToServe.length-1].getY() - 5, 10, 10);
+            g2d.drawString(driver.clientsToServe[driver.clientsToServe.length-1].getID(),
+                    (int) driver.clientsToServe[driver.clientsToServe.length-1].getX() + 4,
+                    (int) driver.clientsToServe[driver.clientsToServe.length-1].getY());
+            g2d.drawLine((int) (Depot.depot.getX()), 
+                        (int) (Depot.depot.getY()), 
+                        (int) (driver.clientsToServe[driver.clientsToServe.length-1].getX()), 
+                        (int) (driver.clientsToServe[driver.clientsToServe.length-1].getY()));
+            /**
+            for (int i = 0; i < driver.tour.length; i++) {
+                g2d.fillOval((int) driver.tour[i].getStart().getX() - 5, (int) driver.tour[i].getStart().getY() - 5, 10, 10);
+                //g2d.drawString(driver.tour[i].getStart()., i, i);
+                g2d.drawLine((int) driver.tour[i].getStart().getX(),
+                            (int) driver.tour[i].getStart().getY(), 
+                            (int) driver.tour[i].getEnd().getX(), 
+                            (int) driver.tour[i].getEnd().getY());
+                g2d.fillOval((int) driver.tour[i].getEnd().getX() - 5, (int) driver.tour[i].getEnd().getY() - 5, 10, 10);
             }
+            */
         }
     }
 }

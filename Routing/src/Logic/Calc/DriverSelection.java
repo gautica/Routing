@@ -6,49 +6,59 @@
 package Logic.Calc;
 
 import Logic.Types.Client;
-import Logic.Types.Driver;
 
 /**
  *
  * @author markus
  */
 public class DriverSelection {
-    
-    public static void Selection(Driver[] drivers, Client[] clients, String[][] matrix)  {
+    public static Client[] clientsToServe = new Client[50];
+    public static Client[] Selection(Client[] clients)  {
         
-        //sorting clients accroding to angle
-        for (int i = 0; i < clients.length - 1; i++) {
-            for (int j = i+1; j < clients.length; j++) {
-                if (clients[i].getAngle() > clients[j].getAngle()) {
-                    Client temp = clients[i];
-                    clients[i] = clients[j];
-                    clients[j] = temp;
-                }
+        /**
+        clientsToServe[0] = clients[32];
+        clientsToServe[1] = clients[66];
+        clientsToServe[2] = clients[20];
+        clientsToServe[3] = clients[39];
+        clientsToServe[4] = clients[29];
+        clientsToServe[5] = clients[88];
+        clientsToServe[6] = clients[68];
+        clientsToServe[7] = clients[95];
+        clientsToServe[8] = clients[33];
+        clientsToServe[9] = clients[18];
+        clientsToServe[10] = clients[4];
+        clientsToServe[11] = clients[11];
+        clientsToServe[12] = clients[80];
+        clientsToServe[13] = clients[97];
+        clientsToServe[14] = clients[0];
+        clientsToServe[15] = clients[76];
+        clientsToServe[16] = clients[2];
+        clientsToServe[17] = clients[25];
+        clientsToServe[18] = clients[31];
+        clientsToServe[19] = clients[10];
+        */
+        int index = (int) (Math.random() * 100);
+        clientsToServe[0] = clients[index];
+        for (int i = 1; i < clientsToServe.length; i++) {  
+            index = (int) (Math.random() * 100);
+            while (!isValid(i, index)) {
+                index = (int) (Math.random() * 100);
+            }
+            clientsToServe[i] = clients[index];
+            //System.out.println(index);
+        }
+        
+        
+        return clientsToServe;
+    }
+    
+    private static boolean isValid(int i, int index) {
+        for (int j = 0; j < i; j++) {
+            if (clientsToServe[j].getID().equals(String.valueOf(index))) {
+                return false;
             }
         }
-        int count = 0;
-        driver: for (int i = 0; i < drivers.length; i++) {    
-            // serve time table for every driver
-            int[] serveTime = new int[clients.length];
-            for (int k = 0; k < serveTime.length; k++) {
-                serveTime[k] = (int) Double.parseDouble(matrix[k][i]);
-            }
-            
-            int size = (clients.length - count) < Driver.Capacity? (clients.length - count) : Driver.Capacity;
-            Client[] clientPerDriver = new Client[size];
-            
-            client: for (int j = 0; j < clientPerDriver.length; j++) {
-                for (int k = count; k < clients.length; k++) {
-                    if (i == (k / Driver.Capacity)) {
-                        clientPerDriver[j] = clients[k];
-                        count++;
-                        continue client;
-                    }
-                }
-            }
-            drivers[i] = new Driver(clientPerDriver, serveTime);
-            //System.out.println(clientPerDriver.length);
-        }
+        return true;
     }
     
 }

@@ -23,11 +23,12 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 public class ReadWriteExcel {
     /**
      * 
+     * @param path
      * @throws IOException 
      */
-    public static void readXLSFile() throws IOException {
+    public static void readXLSFile(String path) throws IOException {
         
-        InputStream ExcelFileRead = new FileInputStream("FamMatrix.xls");
+        InputStream ExcelFileRead = new FileInputStream(path);
         HSSFWorkbook wb = new HSSFWorkbook(ExcelFileRead);
         
         HSSFSheet sheet = wb.getSheetAt(0);
@@ -55,32 +56,32 @@ public class ReadWriteExcel {
         }
     }
     
-    public static String[][] readXLSFileToArray() throws FileNotFoundException, IOException {
-        String[][] contentMatrix = null;
+    public static String[][] readXLSFileToArray(String path) throws FileNotFoundException, IOException {
+        String[][] contentMatrix;
         HSSFRow row;
         HSSFCell cell;
         
-        InputStream ExcelFileRead = new FileInputStream("FamMatrix.xls");
+        InputStream ExcelFileRead = new FileInputStream(path);
         HSSFWorkbook wb = new HSSFWorkbook(ExcelFileRead);
         //int sheets = wb.getNumberOfSheets();
         HSSFSheet sheet = wb.getSheetAt(0);
         int rowNum = sheet.getPhysicalNumberOfRows();
         int cellNum = sheet.getRow(0).getPhysicalNumberOfCells();
         System.out.println(rowNum + "   " + cellNum);
-        contentMatrix = new String[rowNum-2][cellNum-1];
-        for (int i = 1; i < rowNum - 1; i++) {
+        contentMatrix = new String[rowNum][cellNum];
+        for (int i = 0; i < rowNum; i++) {
             row = sheet.getRow(i);
             if (row != null) {
-                for (int j = 1; j < cellNum; j++) {
+                for (int j = 0; j < cellNum; j++) {
                     cell = row.getCell(j);
                     if (cell != null) {
                         if (cell.getCellType()== HSSFCell.CELL_TYPE_STRING) {
-                            contentMatrix[i-1][j-1] = cell.getStringCellValue();
+                            contentMatrix[i][j] = cell.getStringCellValue();
                         } else if (cell.getCellType() == HSSFCell.CELL_TYPE_NUMERIC) {
-                            contentMatrix[i-1][j-1] = String.valueOf(cell.getNumericCellValue());
+                            contentMatrix[i][j] = String.valueOf(cell.getNumericCellValue());
                         } else {
                             System.out.println(cell.getCellType());
-                            System.err.println("unexpected value type of FamMatrix");
+                            System.err.println("unexpected value type in Excel file");
                         }
                     }
                 }
@@ -89,10 +90,7 @@ public class ReadWriteExcel {
         
         return contentMatrix;
     }
-    public static void writeXLSFile(String[][] table) throws IOException {
-        
-        String excelFileName = "test.xls";
-        
+    public static void writeXLSFile(String[][] table, String path) throws IOException {
         String sheetName = "Sheet1";
         
         HSSFWorkbook wb = new HSSFWorkbook();
@@ -110,7 +108,7 @@ public class ReadWriteExcel {
             }
         }
         
-        FileOutputStream fileout = new FileOutputStream(excelFileName);
+        FileOutputStream fileout = new FileOutputStream(path);
         
         //write this workbook to an Outputstream
         wb.write(fileout);

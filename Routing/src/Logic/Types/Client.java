@@ -14,7 +14,6 @@ import Logic.Calc.Angle;
 public class Client extends Point{
     private final String ID;
     private final double angle;
-    //private double[] serveTime = null;
     public Client(String ID, int X, int Y) {
         super(X, Y);
         this.ID = ID;

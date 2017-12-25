@@ -31,18 +31,11 @@ public class Angle {
      * @return The angle in degrees
      */
     public static double angleTo(double x1, double y1, double x2, double y2) {
-        double angle = Math.acos(-(x2 - x1) / Math.sqrt((x1-x2)*(x1-x2) + (y1-y2)*(y1-y2))) * 180 / 3.14;
-        if ((y2 - y1) < 0)
-            return angle;
-        if ((y2 - y1) > 0)
-            return 360 - angle;
-        else if ((x2 - x1) > 0)
-            return 180;
-        else if ((x2 - x1) < 0)
-            return 0;
-        else
+        if (x1 == x2 && y1 == y2) {
             System.out.println("die beiden Node sind dieselbe");
-        return 0;
+            return 0;
+        }
+        return Math.acos((x2-x1) / Math.sqrt((x1-x2)*(x1-x2) + (y1-y2)*(y1-y2))) * 180 / 3.14;
     }
     
 }

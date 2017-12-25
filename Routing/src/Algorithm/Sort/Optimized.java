@@ -8,9 +8,7 @@ package Algorithm.Sort;
 import Algorithm.Opt.OneOpt;
 import Algorithm.Opt.ThreeOpt;
 import Algorithm.Opt.TwoOpt;
-import Logic.Types.Line;
 import Logic.Calc.Crossing;
-import Logic.Types.Depot;
 import Logic.Types.Driver;
 
 /**

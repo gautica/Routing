@@ -11,7 +11,7 @@ package Logic.Types;
  * @author markus
  */
 public class Depot {
-    public static Point depot = new Point(1800, 1800);
+    public static Point depot = new Point(0, 0);
     
     private Depot() {};
     
