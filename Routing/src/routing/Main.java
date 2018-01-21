@@ -34,6 +34,7 @@ public final class Main {
         Driver driver = new Driver(DriverSelection.Selection(clients));
         int[][] f = new int[20][2];
         int[][] cost = new int[20][2];
+        int[][] gesamtCost = new int[20][2];
         
         for (int i = 0; i < 20; i++) {
             driver.clientsToServe = DriverSelection.Selection(clients);
@@ -53,6 +54,8 @@ public final class Main {
             }
             cost[i][0] = i;
             cost[i][1] = driver.getServeTime();
+            gesamtCost[i][0] = i;
+            gesamtCost[i][1] = driver.getServeTime() + (int) ((driver.getTourDistance() / 10) / 60) * 60;
             driver.updateFamilarity();
             f[i][0] = i;
             f[i][1] = driver.getFamilarity();
@@ -61,6 +64,7 @@ public final class Main {
         
         ReadWriteExcel.writeXLSFile(f, "Familarity.xls");
         ReadWriteExcel.writeXLSFile(cost, "Cost.xls");
+        ReadWriteExcel.writeXLSFile(gesamtCost, "gesamteCost.xls");
         
         //MainGUI gui = new MainGUI(driver);
         //gui.setVisible(true); 
